@@ -97,25 +97,24 @@ As variáveis abaixo são listadas como padrão. (Veja defaults/main.yml)
 
 Dependencies
 ------------
-  As depen
+  
     dependencies:
       - jeduoliveira.zulu_openjdk
       - jeduoliveira.tomcat
       - jeduoliveira.elasticsearch
-      - 
+      - geerlingguy.mysql
 
 
 Example Playbook
 ----------------
 
     ---
-
     - hosts: all
       gather_facts: yes
       become: yes
 
       roles:    
-        - role: ansible-role-zulu-openjdk
+        - role: jeduoliveira.zulu_openjdk
         - role: jeduoliveira.elasticsearch
           elasticsearch_version: 6.2.2
 
