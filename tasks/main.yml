@@ -30,7 +30,3 @@
   when: ansible_os_family == 'RedHat'
 
 - include_tasks: install.yml
-
-- name: wait for Lumis framework to start
-  wait_for:
-    port: "8080"
