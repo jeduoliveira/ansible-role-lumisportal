@@ -24,6 +24,8 @@
     login_user: "{{ lumis_db_user }}"
   when:
     - shouldToExistDatabase.changed
+  skip_list:
+    - '503'
 
 - name: Initialize Portal
   command: "./initializeportal.sh"
@@ -32,6 +34,8 @@
     chdir: "{{ lumis_directory }}/{{ lumis_name }}/setup/"
   when:
     - shouldToExistDatabase.changed
+  skip_list:
+    - '503'
 
 - name: Copy default configuration MySQL
   copy:
@@ -52,3 +56,5 @@
     login_user: "{{ lumis_db_user }}"
   when:
     - shouldToExistDatabase.changed
+  skip_list:
+    - '503'
