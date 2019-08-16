@@ -1,0 +1,36 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+
+  roles:
+    - role: ansible-role-zulu-openjdk
+    - role: jeduoliveira.elasticsearch
+      elasticsearch_version: 6.2.2
+
+    - role: jeduoliveira.tomcat
+      tomcat_version: 9
+      tomcat_release: 9.0.19
+    
+    - role: geerlingguy.mysql
+      mysql_enabled_on_startup: true
+      mysql_root_password_update: true
+      mysql_root_password: 123456789
+      mysql_databases:
+        - name: lumisportal
+          encoding: latin1
+          collation: latin1_general_ci
+     
+      mysql_users:
+        - name: lumisportal
+          host: "%"
+          password: 123456789
+          priv: "lumisportal.*:ALL"
+    
+    - role: ansible-role-lumisportal
+      lumis_user: tomcat
+      lumis_group: tomcat
+      lumis_version: 11.2.0
+      lumis_release: 190404
+      lumis_db_user: lumisportal
+      lumis_db_pass: 123456789

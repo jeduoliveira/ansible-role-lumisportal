@@ -1,0 +1,6 @@
+---
+- src: geerlingguy.mysql
+- src: jeduoliveira.zulu_openjdk
+- src: jeduoliveira.elasticsearch
+- src: jeduoliveira.tomcat
+- src: jeduoliveira.lumisportal

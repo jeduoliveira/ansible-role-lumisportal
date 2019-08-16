@@ -1,0 +1,36 @@
+---
+
+- name: Lumis | Ensure lumis group
+  group:
+    name: "{{ lumis_group }}"
+    state: present
+
+- name: Lumis | Ensure lumis user
+  user:
+    name: "{{ lumis_user }}"
+    state: present
+    group: "{{ lumis_group }}"
+    createhome: no
+    system: yes
+
+- name: Define lumis version.
+  set_fact:
+    lumis_version: "{{ __lumis_version }}"
+  when: lumis_version is not defined
+
+- name: Define lumis release.
+  set_fact:
+    lumis_release: "{{ __lumis_release }}"
+  when: lumis_release is not defined
+
+- name: "Install unzip"
+  yum:
+    name: "unzip"
+    state: present
+  when: ansible_os_family == 'RedHat'
+
+- include_tasks: install.yml
+
+- name: wait for Lumis framework to start
+  wait_for:
+    port: "8080"

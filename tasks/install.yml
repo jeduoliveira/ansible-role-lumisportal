@@ -1,0 +1,82 @@
+---
+- name: Ensure lumis directory exists
+  file:
+    path: "{{ lumis_directory }}/{{ lumis_name }}"
+    state: directory
+    owner: "{{ lumis_user }}"
+    group: "{{ lumis_group }}"
+
+- name: Download Lumis framework source
+  get_url:
+    url: "{{ lumis_unarchive_url }}"
+    dest: "/tmp/lumis.zip"
+    mode: 0440
+
+- name: Unarchive Lumis framework package
+  unarchive:
+    src: "/tmp/lumis.zip"
+    dest: "{{ lumis_directory }}/{{ lumis_name }}"
+    owner: "{{ lumis_user }}"
+    group: "{{ lumis_group }}"
+    mode: 0755
+    remote_src: yes
+    creates: "{{ lumis_directory }}/{{ lumis_name }}/setup"
+
+- name: Configure context ROOT lumisportal
+  copy:
+    dest: "{{ tomcat_directory }}/{{ tomcat_name }}/conf/Catalina/localhost/{{ tomcat_context}}.xml"
+    content: "<Context path=\"\" docBase=\"{{ lumis_directory }}/{{ lumis_name }}/www\" crossContext=\"true\"/>"
+    owner: "{{ lumis_group }}"
+    group: "{{ lumis_group }}"
+    mode: 0755
+  when: tomcat_context == 'ROOT'
+  notify: restart tomcat
+
+- name: "Configure context {{ tomcat_context }} lumisportal"
+  copy:
+    dest: "{{ tomcat_directory }}/{{ tomcat_name }}/conf/Catalina/localhost/{{ tomcat_context}}.xml"
+    content: <Context path=\"/{{ tomcat_context }}\" docBase=\"{{ lumis_directory }}/{{ lumis_name }}/www\" crossContext=\"true\"/>
+    owner: "{{ lumis_user }}"
+    group: "{{ lumis_group }}"
+    mode: 0755
+  when: tomcat_context != 'ROOT'
+  notify: restart tomcat
+
+
+- name: Copy libs shared to tomcat
+  copy:
+    src: "{{ lumis_directory }}/{{ lumis_name }}/lib/shared/"
+    dest: "{{ tomcat_directory }}/{{ tomcat_name }}/lib/"
+    owner: "{{ lumis_user }}"
+    group: "{{ lumis_group }}"
+    remote_src: yes
+    mode: 0755
+  notify: restart tomcat
+
+- name: Configure web.xml
+  replace:
+    path: "{{ lumis_directory }}/{{ lumis_name }}/www/WEB-INF/web.xml"
+    regexp: 'LUMIS_DATA_PATH'
+    replace: "{{ lumis_directory }}/{{ lumis_name }}/lumisdata"
+  notify: restart tomcat
+
+- name: Copy template lumisportalconfig.xml
+  template:
+    src: "lumisdata/config/lumisportalconfig.xml.j2"
+    dest: "{{ lumis_directory }}/{{ lumis_name }}/lumisdata/config/lumisportalconfig.xml"
+    owner: "{{ lumis_user }}"
+    group: "{{ lumis_group  }}"
+    mode: 0755
+  notify: restart tomcat
+
+- name: Copy template lumishibernate.cfg.xml
+  template:
+    src: "lumisdata/config/lumishibernate.cfg.xml.j2"
+    dest: "{{ lumis_directory }}/{{ lumis_name }}/lumisdata/config/lumishibernate.cfg.xml"
+    owner: "{{ lumis_user }}"
+    group: "{{ lumis_group  }}"
+    mode: 0755
+  notify: restart tomcat
+
+- include_tasks: setup-MySQL.yml
+  when: lumis_db_type == 'MySQL'

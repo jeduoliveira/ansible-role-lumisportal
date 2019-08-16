@@ -1,0 +1,51 @@
+---
+- name: Copy mysql connector java
+  copy:
+    src: files/mysql-connector-java-8.0.17.jar
+    dest: "{{ lumis_directory }}/{{ lumis_name }}/www/WEB-INF/lib"
+    owner: "{{ lumis_user }}"
+    group: "{{ lumis_group  }}"
+    mode: 0755
+
+- name: Create a database for Lumis framework
+  mysql_db:
+    name: "{{ lumis_db_name }}"
+    state: present
+  register: shouldToExistDatabase
+
+- name: Import db_mysql.sql
+  mysql_db:
+    state: import
+    name: "{{ lumis_db_name }}"
+    target: "{{ lumis_directory }}/{{ lumis_name }}/setup/db_mysql.sql"
+    login_host: "{{ lumis_db_url }}"
+    login_password: "{{ lumis_db_pass }}"
+    login_port: "{{ lumis_db_port }}"
+    login_user: "{{ lumis_db_user }}"
+  when: shouldToExistDatabase.changed == true
+
+- name: Initialize Portal
+  shell: "./initializeportal.sh"
+  args:
+    executable: /bin/bash
+    chdir: "{{ lumis_directory }}/{{ lumis_name }}/setup/"
+  when: shouldToExistDatabase.changed == true
+
+- name: Copy default configuration MySQL
+  copy:
+    src: files/MySQL.sql
+    dest: "{{ lumis_directory }}/{{ lumis_name }}/setup/"
+    owner: "{{ lumis_user }}"
+    group: "{{ lumis_group  }}"
+    mode: 0755
+
+- name: Import default configuration MySQL
+  mysql_db:
+    state: import
+    name: "{{ lumis_db_name }}"
+    target: "{{ lumis_directory }}/{{ lumis_name }}/setup/MySQL.sql"
+    login_host: "{{ lumis_db_url }}"
+    login_password: "{{ lumis_db_pass }}"
+    login_port: "{{ lumis_db_port }}"
+    login_user: "{{ lumis_db_user }}"
+  when: shouldToExistDatabase.changed == true
