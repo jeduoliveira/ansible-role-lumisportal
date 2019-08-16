@@ -27,7 +27,7 @@
           password: 123456789
           priv: "lumisportal.*:ALL"
 
-    - role: ansible-role-lumisportal
+    - role: jeduoliveira.lumisportal
       lumis_user: tomcat
       lumis_group: tomcat
       lumis_version: 11.2.0
