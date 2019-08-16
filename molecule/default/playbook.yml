@@ -4,7 +4,7 @@
   become: true
 
   roles:
-    - role: ansible-role-zulu-openjdk
+    - role: jeduoliveira.zulu_openjdk
     - role: jeduoliveira.elasticsearch
       elasticsearch_version: 6.2.2
 
