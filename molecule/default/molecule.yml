@@ -28,7 +28,7 @@ provisioner:
 
 scenario:
   name: default
-  est_sequence:
+  test_sequence:
     - lint
     - cleanup
     - destroy
