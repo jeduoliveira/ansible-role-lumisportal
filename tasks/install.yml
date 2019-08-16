@@ -24,7 +24,7 @@
 
 - name: Configure context ROOT lumisportal
   copy:
-    dest: "{{ tomcat_directory }}/{{ tomcat_name }}/conf/Catalina/localhost/{{ tomcat_context}}.xml"
+    dest: "{{ tomcat_directory }}/{{ tomcat_name }}/conf/Catalina/localhost/{{ tomcat_context }}.xml"
     content: "<Context path=\"\" docBase=\"{{ lumis_directory }}/{{ lumis_name }}/www\" crossContext=\"true\"/>"
     owner: "{{ lumis_group }}"
     group: "{{ lumis_group }}"
@@ -34,7 +34,7 @@
 
 - name: "Configure context {{ tomcat_context }} lumisportal"
   copy:
-    dest: "{{ tomcat_directory }}/{{ tomcat_name }}/conf/Catalina/localhost/{{ tomcat_context}}.xml"
+    dest: "{{ tomcat_directory }}/{{ tomcat_name }}/conf/Catalina/localhost/{{ tomcat_context }}.xml"
     content: <Context path=\"/{{ tomcat_context }}\" docBase=\"{{ lumis_directory }}/{{ lumis_name }}/www\" crossContext=\"true\"/>
     owner: "{{ lumis_user }}"
     group: "{{ lumis_group }}"
