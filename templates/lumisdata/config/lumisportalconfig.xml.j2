@@ -104,7 +104,7 @@
 	<securityAlias></securityAlias>
 	 -->
 
-{% if lumis_htmlGeneration_enable is defined %}
+{% if lumis_htmlGeneration_enable == True %}
 	<htmlGeneration>
 		<connectTimeout>{{ lumis_htmlGeneration_connectTimeout }}</connectTimeout>
 		<pageRequestTimeout>{{ lumis_htmlGeneration_pageRequestTimeout }}</pageRequestTimeout>
@@ -121,12 +121,12 @@
 	</htmlGeneration>
 {% endif %}
 	
-{% if lumis_errorPage_enable is defined %}
+{% if lumis_errorPage_enable == True %}
 <errorPage>{{ lumis_errorPage }}</errorPage>
 {% endif %}
 	
 
-{% if lumis_cluster_enable is defined %}
+{% if lumis_cluster_enable == True %}
 	<cluster>
 		<properties>{{ lumis_cluster }}</properties>
 	</cluster>

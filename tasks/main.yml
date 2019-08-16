@@ -25,7 +25,13 @@
 
 - name: "Install unzip"
   yum:
-    name: "unzip"
+    name: unzip
+    state: present
+  when: ansible_os_family == 'RedHat'
+
+- name: "Install Mysql"
+  yum:
+    name: mysql
     state: present
   when: ansible_os_family == 'RedHat'
 

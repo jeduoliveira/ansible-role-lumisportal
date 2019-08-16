@@ -12,6 +12,18 @@ tomcat_directory: /opt
 tomcat_context: ROOT
 
 ##############################################
+# elasticsearch configuration
+##############################################
+lumis_elasticsearch_cluster_name: lumisportal
+lumis_elasticsearch_http_9200: 127.0.0.1:9200
+lumis_elasticsearch_http_9300: 127.0.0.1:9300
+
+##############################################
+# lumis statics files patch
+##############################################
+lumis_static_path: /opt/htdocs
+
+##############################################
 # Database configuration lumishibernate.cfg.xml
 ###############################################
 

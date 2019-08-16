@@ -30,6 +30,7 @@ scenario:
   name: default
   est_sequence:
     - lint
+    - cleanup
     - destroy
     - dependency
     - syntax
@@ -41,7 +42,6 @@ scenario:
     - cleanup
     - destroy
 
-#
 verifier:
   name: testinfra
   lint:

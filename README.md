@@ -1,48 +1,157 @@
-Role Name
+LumisXP
 =========
 
-A brief description of the role goes here.
+[![Build Status](https://travis-ci.org/jeduoliveira/ansible-role-lumisportal.svg?branch=master)](https://travis-ci.org/jeduoliveira/ansible-role-lumisportal) 
+
+Um ansible role que instala o [lumisportal](https://lumisxp.lumis.com.br/doc/lumisportal/11.2.0/pt-BR/lumis.installation_and_configuration.system_requirements.html) no RedHat/CentOS.
+
+O LumisXP (Lumis Experience Platform) é uma plataforma para a criação e gestão de soluções para a experiência digital do cliente.
+
+Utilizada por grandes empresas dos mais variados segmentos de mercado, a plataforma conta com diversos recursos que ajudam as empresas a acelerar a transformação digital dos seus negócios. As funcionalidades do LumisXP permitem que você desenvolva os canais digitais da sua empresa, colocando o seu cliente como elemento central da solução.
+
+Do ponto de vista de gestão da experiência do cliente, a plataforma permite que você analise com precisão o comportamento dos seus usuários, de forma que seja possível segmentar não só a comunicação, como também os serviços presentes nos seus canais digitais. Além disso, a plataforma dá total liberdade para as equipes de design e front-end e garante mais agilidade aos profissionais de desenvolvimento. O LumisXP garante ainda segurança e alto desempenho nas soluções de digital customer experience.
+
+Todos esses recursos combinados permitem às empresas criar um ciclo constante de melhorias nos seus canais digitais, de forma a garantir experiências personalizadas para os clientes e insights valiosos para a tomada de decisão dos gestores.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should
-be mentioned here. For instance, if the role uses the EC2 module, it may be a
-good idea to mention in this section that the boto package is required.
+São necessários os seguintes softwares 
+
+- Zulu OpenJDK. [jeduoliveira.zulu_openjdk](https://galaxy.ansible.com/jeduoliveira/zulu_openjdk)
+- Elasticsearch [jeduoliveira.elasticsearch](https://galaxy.ansible.com/jeduoliveira/elasticsearch)
+- Tomcat [jeduoliveira.tomcat](https://galaxy.ansible.com/jeduoliveira/tomcat)
+- MySQL [geerlingguy.mysql](https://galaxy.ansible.com/geerlingguy/mysql)
+
 
 Role Variables
 --------------
+As variáveis abaixo são listadas como padrão. (Veja defaults/main.yml)
 
-A description of the settable variables for this role should go here, including
-any variables that are in defaults/main.yml, vars/main.yml, and any variables
-that can/should be set via parameters to the role. Any variables that are read
-from other roles and/or the global scope (ie. hostvars, group vars, etc.) should
-be mentioned here as well.
+    java_web_server: tomcat
+
+    lumis_name: lumisportal
+    lumis_directory: /opt
+
+    lumis_user: tomcat
+    lumis_group: tomcat
+
+    tomcat_name: tomcat
+    tomcat_directory: /opt
+    tomcat_context: ROOT
+
+    ##############################################
+    # elasticsearch configuration
+    ##############################################
+    lumis_elasticsearch_cluster_name: lumisportal
+    lumis_elasticsearch_http_9200: 127.0.0.1:9200
+    lumis_elasticsearch_http_9300: 127.0.0.1:9300
+
+    ##############################################
+    # lumis statics files patch
+    ##############################################
+    lumis_static_path: /opt/htdocs
+
+    ##############################################
+    # Database configuration lumishibernate.cfg.xml
+    ###############################################
+
+    lumis_db_type: MySQL
+    lumis_db_user: lumisportal
+    lumis_db_pass: lumis#admin
+    lumis_db_url: localhost
+    lumis_db_port: 3306
+    lumis_db_name: lumisportal
+    lumis_db_hikari_minimumIdle: 100
+    lumis_db_hikari_maximumPoolSize: 100
+    lumis_db_driver_class: com.mysql.cj.jdbc.Driver
+
+    ###############################################
+    # Configuration lumisportalconfig.xml
+    ###############################################
+    lumis_server_id: lumis1
+
+    ###############################################
+    # HtmlGeneration
+    ###############################################
+    lumis_htmlGeneration_enable: True
+    lumis_htmlGeneration_connectTimeout: 30000
+    lumis_htmlGeneration_pageRequestTimeout: 50000
+    lumis_htmlGeneration_frameworkUrl: http://localhost:8080
+    lumis_htmlGeneration_htmlCacheLogNavigation: 0
+    lumis_htmlGeneration_htmlFileExtension: .htm
+    lumis_htmlGeneration_shtmlFileExtension: .shtml
+    lumis_htmlGeneration_ssi_sendRedirectOnPageNotFound: true
+    lumis_htmlGeneration_ssi_waitBeforeSendRedirect: 500
+    lumis_htmlGeneration_expirationLimit: 0
+    ################################################
+    # ErrorPager
+    ################################################
+    lumis_errorPage_enable: True
+    lumis_errorPage: customizedErrorPage.jsp
+    ################################################
+    # Cluster
+    ################################################
+    lumis_cluster_enable: False
+    lumis_cluster: TCP(start_port=2400;end_port=2400;loopback=true;bind_addr=10.76.100.104;send_buf_size=500000;recv_buf_size=500000):TCPPING(timeout=3000;initial_hosts=10.76.100.104[2400],10.76.98.15[2400];port_range=1;num_initial_members=10):MERGE2(min_interval=5000;max_interval=20000):FD_SOCK:FD(timeout=5000;max_tries=3;shun=true):VERIFY_SUSPECT(timeout=5000):lumis.portal.cluster.multiserver.DurableNAKACK(gc_lag=50;retransmit_timeout=300,600,1200,2400,4800;use_mcast_xmit=false;discard_delivered_msgs=true):pbcast.STABLE(stability_delay=6000;desired_avg_gossip=20000):pbcast.GMS(join_timeout=11000;shun=true;print_local_addr=true):lumis.portal.cluster.multiserver.Sequencer:pbcast.FLUSH(timeout=10000)
 
 Dependencies
 ------------
+  As depen
+    dependencies:
+      - jeduoliveira.zulu_openjdk
+      - jeduoliveira.tomcat
+      - jeduoliveira.elasticsearch
+      - 
 
-A list of other roles hosted on Galaxy should go here, plus any details in
-regards to parameters that may need to be set for other roles, or variables that
-are used from other roles.
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables
-passed in as parameters) is always nice for users too:
+    ---
 
-    - hosts: servers
-      roles:
-         - { role: roles/ansible-role-lumisportal, x: 42 }
+    - hosts: all
+      gather_facts: yes
+      become: yes
+
+      roles:    
+        - role: ansible-role-zulu-openjdk
+        - role: jeduoliveira.elasticsearch
+          elasticsearch_version: 6.2.2
+
+        - role: jeduoliveira.tomcat
+          tomcat_version: 9
+          tomcat_release: 9.0.19
+        
+        - role: geerlingguy.mysql
+          mysql_enabled_on_startup: true
+          mysql_root_password_update: true
+          mysql_root_password: 123456789
+          mysql_databases:
+            - name: lumisportal
+              encoding: utf8
+              collation: utf8_general_ci
+         
+          mysql_users:
+            - name: lumisportal
+              host: "%"
+              password: 123456789
+              priv: "lumisportal.*:ALL"
+        
+        - role: ansible-role-lumisportal
+          lumis_user: tomcat
+          lumis_group: tomcat
+          lumis_version: 11.2.0
+          lumis_release: 190404
+          lumis_db_user: lumisportal
+          lumis_db_pass: 123456789
 
 License
 -------
 
-BSD
+MIT / BSD
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a
-website (HTML is not allowed).
+Está role foi criada em 2019 por [Jorge Eduardo](https://www.linkedin.com/in/jorgeeduardo/).

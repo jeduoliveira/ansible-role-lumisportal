@@ -42,7 +42,6 @@
   when: tomcat_context != 'ROOT'
   notify: restart tomcat
 
-
 - name: Copy libs shared to tomcat
   copy:
     src: "{{ lumis_directory }}/{{ lumis_name }}/lib/shared/"
