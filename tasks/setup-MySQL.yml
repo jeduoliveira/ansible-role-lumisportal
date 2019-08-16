@@ -22,14 +22,16 @@
     login_password: "{{ lumis_db_pass }}"
     login_port: "{{ lumis_db_port }}"
     login_user: "{{ lumis_db_user }}"
-  when: shouldToExistDatabase.changed
+  when: 
+    - shouldToExistDatabase.changed
 
 - name: Initialize Portal
-  shell: "./initializeportal.sh"
+  command: "./initializeportal.sh"
   args:
     executable: /bin/bash
     chdir: "{{ lumis_directory }}/{{ lumis_name }}/setup/"
-  when: shouldToExistDatabase.changed
+  when: 
+    - shouldToExistDatabase.changed
 
 - name: Copy default configuration MySQL
   copy:
@@ -48,4 +50,5 @@
     login_password: "{{ lumis_db_pass }}"
     login_port: "{{ lumis_db_port }}"
     login_user: "{{ lumis_db_user }}"
-  when: shouldToExistDatabase.changed
+  when: 
+    - shouldToExistDatabase.changed
