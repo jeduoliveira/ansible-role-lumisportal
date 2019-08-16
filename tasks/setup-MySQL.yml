@@ -19,10 +19,6 @@
   changed_when: false
   check_mode: false
 
-- name: Display all variables/facts known for a host
-  debug:
-    var: lum_Principal_already_exists
-
 - name: Import db_mysql.sql
   mysql_db:
     state: import
