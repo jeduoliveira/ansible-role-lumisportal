@@ -11,6 +11,8 @@
     url: "{{ lumis_unarchive_url }}"
     dest: "/tmp/lumis.zip"
     mode: 0440
+    url_username: "{{ lumis_download_user }}"
+    url_password: "{{ lumis_download_password }}"
 
 - name: Unarchive Lumis framework package
   unarchive:

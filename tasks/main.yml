@@ -1,5 +1,5 @@
 ---
-
+- debug: var=hostvars[inventory_hostname]['ansible_default_ipv6']
 - name: Lumis | Ensure lumis group
   group:
     name: "{{ lumis_group }}"

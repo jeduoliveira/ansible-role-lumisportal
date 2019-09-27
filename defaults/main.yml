@@ -1,9 +1,18 @@
 ---
+# usuario e senha para realizar o download do instalador do lumisportal.
+lumis_download_user: user
+lumis_download_password: user
+
+# nome do webserver tomcat, jboss etc
 java_web_server: tomcat
 
+# nome da pasta do lumis_home
 lumis_name: lumisportal
+
+#local onde onde o lumisportal será instalado
 lumis_directory: /opt
 
+# o usuário e grupo que irá rodar o lumisportal
 lumis_user: tomcat
 lumis_group: tomcat
 
@@ -55,11 +64,13 @@ lumis_htmlGeneration_shtmlFileExtension: .shtml
 lumis_htmlGeneration_ssi_sendRedirectOnPageNotFound: true
 lumis_htmlGeneration_ssi_waitBeforeSendRedirect: 500
 lumis_htmlGeneration_expirationLimit: 0
+
 ################################################
 # ErrorPager
 ################################################
 lumis_errorPage_enable: True
 lumis_errorPage: customizedErrorPage.jsp
+
 ################################################
 # Cluster
 ################################################
