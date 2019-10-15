@@ -7,7 +7,7 @@ lumis_unarchive_url: http://lumisxp.lumis.com.br/setup/{{ lumis_version }}/setup
 
 packages:
   - unzip
-  - mysql 
+  - mysql
   - MySQL-python
 
 synonyms:

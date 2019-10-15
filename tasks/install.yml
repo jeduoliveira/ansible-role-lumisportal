@@ -79,7 +79,7 @@
     mode: 0755
   notify: restart tomcat
 
-- name: Ensure lumis-analysis directory 
+- name: Ensure lumis-analysis directory
   file:
     path: "{{ lumis_directory }}/{{ lumis_name }}/lumisdata/shared/data/elasticsearch/lumis-analysis"
     state: directory
@@ -97,7 +97,7 @@
   notify: restart tomcat
 
 - name: create synonyms files
-  file: 
+  file:
     path: "{{ item }}"
     state: touch
     owner: elasticsearch
@@ -108,4 +108,3 @@
 
 - include_tasks: setup-MySQL.yml
   when: lumis_db_type == 'MySQL'
-
