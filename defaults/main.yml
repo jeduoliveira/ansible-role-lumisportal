@@ -16,6 +16,8 @@ lumis_directory: /opt
 lumis_user: tomcat
 lumis_group: tomcat
 
+lumis_environment_type: DEVELOPMENT
+
 tomcat_name: tomcat
 tomcat_directory: /opt
 tomcat_context: ROOT

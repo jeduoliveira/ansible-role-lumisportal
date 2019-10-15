@@ -79,5 +79,33 @@
     mode: 0755
   notify: restart tomcat
 
+- name: Ensure lumis-analysis directory 
+  file:
+    path: "{{ lumis_directory }}/{{ lumis_name }}/lumisdata/shared/data/elasticsearch/lumis-analysis"
+    state: directory
+    owner: elasticsearch
+    group: elasticsearch
+  notify: restart tomcat
+
+- name: Create a symbolic link lumis-analysis
+  file:
+    src: "{{ lumis_directory }}/{{ lumis_name }}/lumisdata/shared/data/elasticsearch/lumis-analysis"
+    dest: /etc/elasticsearch/lumis-analysis
+    owner: elasticsearch
+    group: elasticsearch
+    state: link
+  notify: restart tomcat
+
+- name: create synonyms files
+  file: 
+    path: "{{ item }}"
+    state: touch
+    owner: elasticsearch
+    group: elasticsearch
+    mode: 0600
+  with_items: "{{ synonyms }}"
+
+
 - include_tasks: setup-MySQL.yml
   when: lumis_db_type == 'MySQL'
+

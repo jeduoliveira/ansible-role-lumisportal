@@ -1,5 +1,5 @@
 ---
-- debug: var=hostvars[inventory_hostname]['ansible_default_ipv6']
+
 - name: Lumis | Ensure lumis group
   group:
     name: "{{ lumis_group }}"
@@ -23,15 +23,9 @@
     lumis_release: "{{ __lumis_release }}"
   when: lumis_release is not defined
 
-- name: "Install unzip"
+- name: "Install packages"
   yum:
-    name: unzip
-    state: present
-  when: ansible_os_family == 'RedHat'
-
-- name: "Install Mysql"
-  yum:
-    name: mysql
+    name: "{{ packages }}"
     state: present
   when: ansible_os_family == 'RedHat'
 

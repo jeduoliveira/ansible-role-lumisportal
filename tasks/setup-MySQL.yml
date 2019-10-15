@@ -11,23 +11,28 @@
   mysql_db:
     name: "{{ lumis_db_name }}"
     state: present
+    login_host: "{{ lumis_db_url }}"
+    login_password: "{{ lumis_db_pass }}"
+    login_port: "{{ lumis_db_port }}"
+    login_user: "{{ lumis_db_user }}"
   register: shouldToExistDatabase
 
 - name: Verify if database was created
-  command: mysql -NBe "SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME='lum_Principal'"
+  command: mysql -h "{{ lumis_db_url }}" -u "{{ lumis_db_user }}" -p"{{ lumis_db_pass }}"  -NBe "SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME='lum_Principal'"
   register: lum_Principal_already_exists
   changed_when: false
   check_mode: false
 
 - name: Import db_mysql.sql
   mysql_db:
-    state: import
-    name: "{{ lumis_db_name }}"
-    target: "{{ lumis_directory }}/{{ lumis_name }}/setup/db_mysql.sql"
     login_host: "{{ lumis_db_url }}"
     login_password: "{{ lumis_db_pass }}"
     login_port: "{{ lumis_db_port }}"
     login_user: "{{ lumis_db_user }}"
+    state: import
+    name: "{{ lumis_db_name }}"
+    target: "{{ lumis_directory }}/{{ lumis_name }}/setup/db_mysql.sql"
+  ignore_errors: yes
   when: lum_Principal_already_exists.stdout == "0"
   tags:
     - skip_ansible_lint
@@ -48,8 +53,8 @@
     owner: "{{ lumis_user }}"
     group: "{{ lumis_group  }}"
     mode: 0755
-  when: lum_Principal_already_exists.stdout == "0"
   notify: restart tomcat
+  when: lum_Principal_already_exists.stdout == "0"
 
 - name: Import default configuration MySQL
   mysql_db:
@@ -60,6 +65,6 @@
     login_password: "{{ lumis_db_pass }}"
     login_port: "{{ lumis_db_port }}"
     login_user: "{{ lumis_db_user }}"
-  when: lum_Principal_already_exists.stdout == "0"
   tags:
     - skip_ansible_lint
+  when: lum_Principal_already_exists.stdout == "0"
