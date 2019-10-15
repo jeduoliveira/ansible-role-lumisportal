@@ -6,6 +6,6 @@ VALUES(  '000000000A00000000000A0000100000', '{{ lumis_environment_type }}','lum
 UPDATE lum_Website set webRootPath='{{ lumis_static_path }}' where name ='default';
 
 INSERT INTO lum_PCQueue (id, queueId, onDemandOnly, deleteOutdated , shadowCacheEnabled, isolated,maxErrorCount, errorPriorityDecrement, errorGenerationDelay, autoBulkExpiration )
-VALUES ('FF8080816DCFAEE0016DD064A818091B', 'default,0,0,0,0,10,500,60,1')
+VALUES ('FF8080816DCFAEE0016DD064A818091B', 'default, 0, 0, 0, 0, 10, 500, 60, 1');
 
 COMMIT;
