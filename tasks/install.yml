@@ -85,6 +85,7 @@
     state: directory
     owner: elasticsearch
     group: elasticsearch
+    mode: 0755
   notify: restart tomcat
 
 - name: Create a symbolic link lumis-analysis
@@ -94,6 +95,7 @@
     owner: elasticsearch
     group: elasticsearch
     state: link
+    mode: 0755
   notify: restart tomcat
 
 - name: create synonyms files
@@ -102,7 +104,7 @@
     state: touch
     owner: elasticsearch
     group: elasticsearch
-    mode: 0600
+    mode: 0755
   with_items: "{{ synonyms }}"
 
 
