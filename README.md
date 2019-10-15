@@ -1,8 +1,6 @@
 LumisXP
 =========
 
-[![Build Status](https://travis-ci.org/jeduoliveira/ansible-role-lumisportal.svg?branch=master)](https://travis-ci.org/jeduoliveira/ansible-role-lumisportal) 
-
 Instala e configura o [lumisportal](https://lumisxp.lumis.com.br/doc/lumisportal/11.2.0/pt-BR/lumis.installation_and_configuration.system_requirements.html) no RedHat/CentOS 7.
 
 O LumisXP (Lumis Experience Platform) é uma plataforma para a criação e gestão de soluções para a experiência digital do cliente.
