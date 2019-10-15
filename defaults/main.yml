@@ -9,7 +9,7 @@ java_web_server: tomcat
 # nome da pasta do lumis_home
 lumis_name: lumisportal
 
-#local onde onde o lumisportal será instalado
+# local onde onde o lumisportal será instalado
 lumis_directory: /opt
 
 # o usuário e grupo que irá rodar o lumisportal
@@ -22,21 +22,21 @@ tomcat_name: tomcat
 tomcat_directory: /opt
 tomcat_context: ROOT
 
-##############################################
+# #############################################
 # elasticsearch configuration
-##############################################
+# #############################################
 lumis_elasticsearch_cluster_name: lumisportal
 lumis_elasticsearch_http_9200: 127.0.0.1:9200
 lumis_elasticsearch_http_9300: 127.0.0.1:9300
 
-##############################################
+# #############################################
 # lumis statics files patch
-##############################################
+# #############################################
 lumis_static_path: /opt/htdocs
 
-##############################################
+# #############################################
 # Database configuration lumishibernate.cfg.xml
-###############################################
+# ##############################################
 
 lumis_db_type: MySQL
 lumis_db_user: lumisportal
@@ -48,14 +48,14 @@ lumis_db_hikari_minimumIdle: 100
 lumis_db_hikari_maximumPoolSize: 100
 lumis_db_driver_class: com.mysql.cj.jdbc.Driver
 
-###############################################
+# ##############################################
 # Configuration lumisportalconfig.xml
-###############################################
+# ##############################################
 lumis_server_id: lumis1
 
-###############################################
+# ##############################################
 # HtmlGeneration
-###############################################
+# ##############################################
 lumis_htmlGeneration_enable: True
 lumis_htmlGeneration_connectTimeout: 30000
 lumis_htmlGeneration_pageRequestTimeout: 50000
@@ -67,14 +67,14 @@ lumis_htmlGeneration_ssi_sendRedirectOnPageNotFound: true
 lumis_htmlGeneration_ssi_waitBeforeSendRedirect: 500
 lumis_htmlGeneration_expirationLimit: 0
 
-################################################
+# ###############################################
 # ErrorPager
-################################################
+# ###############################################
 lumis_errorPage_enable: True
 lumis_errorPage: customizedErrorPage.jsp
 
-################################################
+# ###############################################
 # Cluster
-################################################
+# ###############################################
 lumis_cluster_enable: False
 lumis_cluster: TCP(start_port=2400;end_port=2400;loopback=true;bind_addr=10.76.100.104;send_buf_size=500000;recv_buf_size=500000):TCPPING(timeout=3000;initial_hosts=10.76.100.104[2400],10.76.98.15[2400];port_range=1;num_initial_members=10):MERGE2(min_interval=5000;max_interval=20000):FD_SOCK:FD(timeout=5000;max_tries=3;shun=true):VERIFY_SUSPECT(timeout=5000):lumis.portal.cluster.multiserver.DurableNAKACK(gc_lag=50;retransmit_timeout=300,600,1200,2400,4800;use_mcast_xmit=false;discard_delivered_msgs=true):pbcast.STABLE(stability_delay=6000;desired_avg_gossip=20000):pbcast.GMS(join_timeout=11000;shun=true;print_local_addr=true):lumis.portal.cluster.multiserver.Sequencer:pbcast.FLUSH(timeout=10000)
