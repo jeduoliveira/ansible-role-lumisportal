@@ -128,9 +128,38 @@
 
 {% if lumis_cluster_enable == True %}
 	<cluster>
+		{% if lumis_version == '12.1.0' %}
 		<properties>{{ lumis_cluster }}</properties>
+		{% endif %}
+
+		{% if lumis_version == '12.1.0' %}
+			<config>
+				<TCP bind_addr="{{ lumis_cluster_bind_addr }}" bind_port="{{ lumis_cluster_start_port }}" port_range="0" recv_buf_size="500000" send_buf_size="500000" />
+				<TCPPING initial_hosts="{{ lumis_cluster_initial_hosts }}" port_range="0" />
+				<MERGE3 />
+				<FD_SOCK />
+				<FD_ALL2 timeout="10000" interval="3000"/>
+				<VERIFY_SUSPECT timeout="5000" />
+				<lumis.portal.cluster.multiserver.DurableNAKACK />
+				<UNICAST3 />\
+				<pbcast.STABLE />
+				<FRAG2 />
+				<pbcast.GMS join_timeout="5000" />
+				<pbcast.FLUSH />
+				<lumis.portal.cluster.multiserver.Sequencer />
+			</config>
+		{% endif %}
+
+		
 	</cluster>
 {% endif %}
+
+
+
+
+
+
+
 
 	<!-- Uncomment to configure IExecutorManager properties.
 	<executor>

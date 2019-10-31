@@ -5,6 +5,9 @@
     state: directory
     owner: "{{ lumis_user }}"
     group: "{{ lumis_group }}"
+  tags:
+    - lumisportal
+
 
 - name: Download Lumis framework source
   get_url:
@@ -13,6 +16,8 @@
     mode: 0440
     url_username: "{{ lumis_download_user }}"
     url_password: "{{ lumis_download_password }}"
+  tags:
+    - lumisportal
 
 - name: Unarchive Lumis framework package
   unarchive:
@@ -23,6 +28,8 @@
     mode: 0755
     remote_src: yes
     creates: "{{ lumis_directory }}/{{ lumis_name }}/setup"
+  tags:
+    - lumisportal
 
 - name: Configure context ROOT lumisportal
   copy:
@@ -33,6 +40,8 @@
     mode: 0755
   when: tomcat_context == 'ROOT'
   notify: restart tomcat
+  tags:
+    - lumisportal
 
 - name: "Configure context {{ tomcat_context }} lumisportal"
   copy:
@@ -43,6 +52,8 @@
     mode: 0755
   when: tomcat_context != 'ROOT'
   notify: restart tomcat
+  tags:
+    - lumisportal
 
 - name: Copy libs shared to tomcat
   copy:
@@ -53,6 +64,8 @@
     remote_src: yes
     mode: 0755
   notify: restart tomcat
+  tags:
+    - lumisportal
 
 - name: Configure web.xml
   replace:
@@ -69,6 +82,8 @@
     group: "{{ lumis_group  }}"
     mode: 0755
   notify: restart tomcat
+  tags:
+    - lumisportal
 
 - name: Copy template lumishibernate.cfg.xml
   template:
@@ -78,6 +93,8 @@
     group: "{{ lumis_group  }}"
     mode: 0755
   notify: restart tomcat
+  tags:
+    - lumisportal
 
 - name: Ensure lumis-analysis directory
   file:
@@ -87,6 +104,8 @@
     group: elasticsearch
     mode: 0755
   notify: restart tomcat
+  tags:
+    - lumisportal
 
 - name: Create a symbolic link lumis-analysis
   file:
@@ -97,6 +116,14 @@
     state: link
     mode: 0755
   notify: restart tomcat
+  tags:
+    - lumisportal
+
+- stat: 
+    path: /etc/elasticsearch/lumis-analysis/synonyms-pt_BR.txt
+  register: p
+  tags:
+    - lumisportal
 
 - name: create synonyms files
   file:
@@ -106,7 +133,11 @@
     group: elasticsearch
     mode: 0755
   with_items: "{{ synonyms }}"
-
+  when: p.stat.exists is defined and not p.stat.exists
+  tags:
+    - lumisportal
 
 - include_tasks: setup-MySQL.yml
   when: lumis_db_type == 'MySQL'
+  tags:
+    - lumisportal

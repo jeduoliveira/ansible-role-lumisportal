@@ -4,6 +4,8 @@
   group:
     name: "{{ lumis_group }}"
     state: present
+  tags:
+    - lumisportal
 
 - name: Lumis | Ensure lumis user
   user:
@@ -12,21 +14,31 @@
     group: "{{ lumis_group }}"
     createhome: no
     system: yes
+  tags:
+    - lumisportal
 
 - name: Define lumis version.
   set_fact:
     lumis_version: "{{ __lumis_version }}"
   when: lumis_version is not defined
+  tags:
+    - lumisportal
 
 - name: Define lumis release.
   set_fact:
     lumis_release: "{{ __lumis_release }}"
   when: lumis_release is not defined
+  tags:
+    - lumisportal
 
 - name: "Install packages"
   yum:
     name: "{{ packages }}"
     state: present
   when: ansible_os_family == 'RedHat'
+  tags:
+    - lumisportal
 
 - include_tasks: install.yml
+  tags:
+    - lumisportal
