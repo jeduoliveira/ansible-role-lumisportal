@@ -13,7 +13,7 @@
   get_url:
     url: "{{ lumis_unarchive_url }}"
     dest: "/tmp/lumisportal_{{ lumis_version }}.{{ lumis_release }}.zip"
-    mode: 0755    
+    mode: 0755
   when: lumis_source_install_type == 'remote'
   tags:
     - lumisportal
@@ -115,8 +115,8 @@
   when: lumis_db_type == 'MySQL'
   tags:
     - lumisportal
-    - bootstrap  
-  
+    - bootstrap
+
 - name: created lumis-analysis directory
   file:
     path: "{{ lumis_directory }}/{{ lumis_name }}/lumisdata/shared/data/elasticsearch/lumis-analysis"
@@ -140,7 +140,7 @@
   tags:
     - lumisportal
 
-- stat: 
+- stat:
     path: /etc/elasticsearch/lumis-analysis/synonyms-pt_BR.txt
   register: p
   tags:
@@ -157,5 +157,3 @@
   when: p.stat.exists is defined and not p.stat.exists
   tags:
     - lumisportal
-
-

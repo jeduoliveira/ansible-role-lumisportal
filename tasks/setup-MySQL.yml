@@ -88,5 +88,3 @@
     - skip_ansible_lint
     - lumisportal
     - bootstrap
-
-

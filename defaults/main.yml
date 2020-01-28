@@ -1,7 +1,7 @@
 ---
 # informa se o zip de instalação do lumisportal está local ou na cloud, local informar o path do diretorio. Exemplo:  /tmp/install/
 lumis_source_install_type: remote
-lumis_source_install_path: 
+lumis_source_install_path:
 
 # usuario e senha para realizar o download do instalador do lumisportal.
 lumis_download_user: user
@@ -51,7 +51,7 @@ lumis_db_name: lumisportal
 lumis_db_hikari_minimumIdle: 100
 lumis_db_hikari_maximumPoolSize: 100
 lumis_db_driver_class: com.mysql.cj.jdbc.Driver
-lumis_db_oracle_sid:  
+lumis_db_oracle_sid:
 
 # ##############################################
 # Configuration lumisportalconfig.xml
