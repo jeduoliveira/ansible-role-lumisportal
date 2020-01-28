@@ -1,5 +1,5 @@
 ---
-- name: Ensure lumis directory exists
+- name: created lumis home directory
   file:
     path: "{{ lumis_directory }}/{{ lumis_name }}"
     state: directory
@@ -7,21 +7,31 @@
     group: "{{ lumis_group }}"
   tags:
     - lumisportal
+    - bootstrap
 
-
-- name: Download Lumis framework source
+- name: copied package remote lumis
   get_url:
     url: "{{ lumis_unarchive_url }}"
-    dest: "/tmp/lumis.zip"
-    mode: 0440
-    url_username: "{{ lumis_download_user }}"
-    url_password: "{{ lumis_download_password }}"
+    dest: "/tmp/lumisportal_{{ lumis_version }}.{{ lumis_release }}.zip"
+    mode: 0755    
+  when: lumis_source_install_type == 'remote'
   tags:
     - lumisportal
+    - bootstrap
 
-- name: Unarchive Lumis framework package
+- name: copied package local lumis
+  copy:
+    src: "{{lumis_source_install_path}}/lumisportal_{{ lumis_version }}.{{ lumis_release }}.zip"
+    dest: "/tmp/lumisportal_{{ lumis_version }}.{{ lumis_release }}.zip"
+    mode: 0755
+  when: lumis_source_install_type == 'local'
+  tags:
+    - lumisportal
+    - bootstrap
+
+- name: unarchive lumis zip
   unarchive:
-    src: "/tmp/lumis.zip"
+    src: "/tmp/lumisportal_{{ lumis_version }}.{{ lumis_release }}.zip"
     dest: "{{ lumis_directory }}/{{ lumis_name }}"
     owner: "{{ lumis_user }}"
     group: "{{ lumis_group }}"
@@ -30,8 +40,9 @@
     creates: "{{ lumis_directory }}/{{ lumis_name }}/setup"
   tags:
     - lumisportal
+    - bootstrap
 
-- name: Configure context ROOT lumisportal
+- name: configured context root on tomcat
   copy:
     dest: "{{ tomcat_directory }}/{{ tomcat_name }}/conf/Catalina/localhost/{{ tomcat_context }}.xml"
     content: "<Context path=\"\" docBase=\"{{ lumis_directory }}/{{ lumis_name }}/www\" crossContext=\"true\"/>"
@@ -43,7 +54,7 @@
   tags:
     - lumisportal
 
-- name: "Configure context {{ tomcat_context }} lumisportal"
+- name: configured context different root on tomcat
   copy:
     dest: "{{ tomcat_directory }}/{{ tomcat_name }}/conf/Catalina/localhost/{{ tomcat_context }}.xml"
     content: <Context path=\"/{{ tomcat_context }}\" docBase=\"{{ lumis_directory }}/{{ lumis_name }}/www\" crossContext=\"true\"/>
@@ -55,7 +66,7 @@
   tags:
     - lumisportal
 
-- name: Copy libs shared to tomcat
+- name: copied libs to tomcat
   copy:
     src: "{{ lumis_directory }}/{{ lumis_name }}/lib/shared/"
     dest: "{{ tomcat_directory }}/{{ tomcat_name }}/lib/"
@@ -67,14 +78,16 @@
   tags:
     - lumisportal
 
-- name: Configure web.xml
+- name: configured web.xml
   replace:
     path: "{{ lumis_directory }}/{{ lumis_name }}/www/WEB-INF/web.xml"
     regexp: 'LUMIS_DATA_PATH'
     replace: "{{ lumis_directory }}/{{ lumis_name }}/lumisdata"
   notify: restart tomcat
+  tags:
+    - lumisportal
 
-- name: Copy template lumisportalconfig.xml
+- name: copied template lumisportalconfig.xml
   template:
     src: "lumisdata/config/lumisportalconfig.xml.j2"
     dest: "{{ lumis_directory }}/{{ lumis_name }}/lumisdata/config/lumisportalconfig.xml"
@@ -84,8 +97,9 @@
   notify: restart tomcat
   tags:
     - lumisportal
+    - bootstrap
 
-- name: Copy template lumishibernate.cfg.xml
+- name: copied template lumishibernate.cfg.xml
   template:
     src: "lumisdata/config/lumishibernate.cfg.xml.j2"
     dest: "{{ lumis_directory }}/{{ lumis_name }}/lumisdata/config/lumishibernate.cfg.xml"
@@ -95,8 +109,15 @@
   notify: restart tomcat
   tags:
     - lumisportal
+    - bootstrap
 
-- name: Ensure lumis-analysis directory
+- include_tasks: setup-MySQL.yml
+  when: lumis_db_type == 'MySQL'
+  tags:
+    - lumisportal
+    - bootstrap  
+  
+- name: created lumis-analysis directory
   file:
     path: "{{ lumis_directory }}/{{ lumis_name }}/lumisdata/shared/data/elasticsearch/lumis-analysis"
     state: directory
@@ -107,7 +128,7 @@
   tags:
     - lumisportal
 
-- name: Create a symbolic link lumis-analysis
+- name: created a symbolic link lumis-analysis
   file:
     src: "{{ lumis_directory }}/{{ lumis_name }}/lumisdata/shared/data/elasticsearch/lumis-analysis"
     dest: /etc/elasticsearch/lumis-analysis
@@ -125,7 +146,7 @@
   tags:
     - lumisportal
 
-- name: create synonyms files
+- name: created synonyms files
   file:
     path: "{{ item }}"
     state: touch
@@ -137,7 +158,4 @@
   tags:
     - lumisportal
 
-- include_tasks: setup-MySQL.yml
-  when: lumis_db_type == 'MySQL'
-  tags:
-    - lumisportal
+

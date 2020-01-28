@@ -1,5 +1,6 @@
 ---
-- name: Copy mysql connector java
+
+- name: copied mysql connector java
   copy:
     src: files/mysql-connector-java-8.0.17.jar
     dest: "{{ lumis_directory }}/{{ lumis_name }}/www/WEB-INF/lib"
@@ -8,8 +9,9 @@
     mode: 0755
   tags:
     - lumisportal
+    - bootstrap
 
-- name: Force create a database for Lumis framework
+- name: created a database
   mysql_db:
     name: "{{ lumis_db_name }}"
     state: present
@@ -18,44 +20,48 @@
     login_port: "{{ lumis_db_port }}"
     login_user: "{{ lumis_db_user }}"
   register: shouldToExistDatabase
+  when: inventory_hostname == "lumis1"
   tags:
     - lumisportal
+    - bootstrap
 
-- name: Verify if database was created
+- name: verified if database was created
   command: mysql -h "{{ lumis_db_url }}" -u "{{ lumis_db_user }}" -p"{{ lumis_db_pass }}"  -NBe "SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME='lum_Principal'"
   register: lum_Principal_already_exists
   changed_when: false
   check_mode: false
+  when: inventory_hostname == "lumis1"
   tags:
     - lumisportal
+    - bootstrap
 
-- name: Import db_mysql.sql
+- name: imported tables and datas
   mysql_db:
+    state: import
+    name: "{{ lumis_db_name }}"
+    target: "{{ lumis_directory }}/{{ lumis_name }}/setup/db_mysql.sql"
     login_host: "{{ lumis_db_url }}"
     login_password: "{{ lumis_db_pass }}"
     login_port: "{{ lumis_db_port }}"
     login_user: "{{ lumis_db_user }}"
-    state: import
-    name: "{{ lumis_db_name }}"
-    target: "{{ lumis_directory }}/{{ lumis_name }}/setup/db_mysql.sql"
-  ignore_errors: yes
-  when: lum_Principal_already_exists.stdout == "0"
-  tags:
-    - skip_ansible_lint
-    - lumisportal
-  
 
-- name: Initialize Portal
+  when: inventory_hostname == "lumis1" and lum_Principal_already_exists.stdout == "0"
+  tags:
+    - lumisportal
+    - bootstrap
+
+- name: initialized Portal
   command: "./initializeportal.sh"
   args:
-    executable: /bin/bash
     chdir: "{{ lumis_directory }}/{{ lumis_name }}/setup/"
-  when: lum_Principal_already_exists.stdout == "0"
+  become: yes
+  become_user: "{{ lumis_user }}"
+  when: inventory_hostname == "lumis1" and lum_Principal_already_exists.stdout == "0"
   tags:
-    - skip_ansible_lint
     - lumisportal
+    - bootstrap
 
-- name: Copy default configuration MySQL
+- name: copied default configuration MySQL
   template:
     src: MySQL.sql.j2
     dest: "{{ lumis_directory }}/{{ lumis_name }}/setup/MySQL.sql"
@@ -63,11 +69,12 @@
     group: "{{ lumis_group  }}"
     mode: 0755
   notify: restart tomcat
-  when: lum_Principal_already_exists.stdout == "0"
+  when: inventory_hostname == "lumis1" and lum_Principal_already_exists.stdout == "0"
   tags:
     - lumisportal
+    - bootstrap
 
-- name: Import default configuration MySQL
+- name: imported default configuration MySQL
   mysql_db:
     state: import
     name: "{{ lumis_db_name }}"
@@ -76,7 +83,10 @@
     login_password: "{{ lumis_db_pass }}"
     login_port: "{{ lumis_db_port }}"
     login_user: "{{ lumis_db_user }}"
+  when: inventory_hostname == "lumis1" and lum_Principal_already_exists.stdout == "0"
   tags:
     - skip_ansible_lint
     - lumisportal
-  when: lum_Principal_already_exists.stdout == "0"
+    - bootstrap
+
+

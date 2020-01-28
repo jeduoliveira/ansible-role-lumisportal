@@ -16,22 +16,21 @@
 		<property name="hikari.connectionTestQuery">select 1</property>
 		-->
 		 
-		<!-- Oracle -->
-		<!-- 
+{% if lumis_db_type == 'oracle' %}
 		<property name="dialect">lumis.portal.dao.hibernate.Oracle10gDialect</property>
 		<property name="connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
-		<property name="connection.username">lumisportal</property>
-		<property name="connection.password">lumisportal</property>
-		<property name="connection.url">jdbc:oracle:thin:@localhost:1521:orcl</property>
+		<property name="connection.username">{{ lumis_db_user }}</property>
+		<property name="connection.password">{{ lumis_db_pass }}</property>
+		<property name="connection.url">jdbc:oracle:thin:@{{ lumis_db_url }}:{{ lumis_db_port }}:{{ lumis_db_oracle_sid }}</property>
 		<property name="connection.defaultRowPrefetch">50</property>
-		-->
+{% endif %}
 
 {% if lumis_db_type == 'MySQL' %}
 		<property name="dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
 		<property name="connection.driver_class">{{ lumis_db_driver_class }}</property>
-		<property name="connection.username">{{lumis_db_user}}</property>
-		<property name="connection.password">{{lumis_db_pass}}</property>
-		<property name="connection.url">jdbc:mysql://{{lumis_db_url}}:{{lumis_db_port}}/{{lumis_db_name}}?characterEncoding=UTF-8&amp;useSSL=false&amp;allowPublicKeyRetrieval=true&amp;useConfigs=maxPerformance&amp;prepStmtCacheSize=500&amp;prepStmtCacheSqlLimit=2048</property>
+		<property name="connection.username">{{ lumis_db_user }}</property>
+		<property name="connection.password">{{ lumis_db_pass }}</property>
+		<property name="connection.url">jdbc:mysql://{{ lumis_db_url }}:{{ lumis_db_port }}/{{ lumis_db_name }}?characterEncoding=UTF-8&amp;useSSL=false&amp;allowPublicKeyRetrieval=true&amp;useConfigs=maxPerformance&amp;prepStmtCacheSize=500&amp;prepStmtCacheSqlLimit=2048</property>
 		<property name="connection.isolation">2</property>
 {% endif %}
 

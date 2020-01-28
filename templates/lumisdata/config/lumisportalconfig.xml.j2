@@ -125,10 +125,9 @@
 <errorPage>{{ lumis_errorPage }}</errorPage>
 {% endif %}
 	
-
 {% if lumis_cluster_enable == True %}
 	<cluster>
-		{% if lumis_version == '12.1.0' %}
+		{% if lumis_version != '12.1.0' %}
 		<properties>{{ lumis_cluster }}</properties>
 		{% endif %}
 
@@ -154,24 +153,17 @@
 	</cluster>
 {% endif %}
 
-
-
-
-
-
-
-
 	<!-- Uncomment to configure IExecutorManager properties.
 	<executor>
 		<minThreads>5</minThreads>
 		<maxThreads>20</maxThreads>
 	</executor>
 	-->
-	
-	<!-- Uncomment to configure loading message.
-	<loadingHtmlMessage><![CDATA[<img src="#lumFixPathReference-lumis/portal/client/images/Loading.gif-lumFixPathReference#" style="vertical-align: middle;" alt="${localize("STR_LOADING")}"/>]]></loadingHtmlMessage>
-	-->
-	
+
+{% if lumis_loadingHtmlMessage_enable == True %}	
+	{{ lumis_loadingHtmlMessage }}
+{% endif %}	
+
 	<!-- Uncomment for fine tunning XmlUtil internal DocumentBuilder pool
 	<documentBuilderPool>
 		<minSize>10</minSize>

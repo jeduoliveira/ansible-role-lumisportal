@@ -1,13 +1,14 @@
 ---
 
-- name: Lumis | Ensure lumis group
+- name: created OS group lumis
   group:
     name: "{{ lumis_group }}"
     state: present
   tags:
     - lumisportal
+    - bootstrap
 
-- name: Lumis | Ensure lumis user
+- name: created OS user lumis
   user:
     name: "{{ lumis_user }}"
     state: present
@@ -16,29 +17,34 @@
     system: yes
   tags:
     - lumisportal
+    - bootstrap
 
-- name: Define lumis version.
+- name: defined variable lumis version
   set_fact:
     lumis_version: "{{ __lumis_version }}"
   when: lumis_version is not defined
   tags:
     - lumisportal
+    - bootstrap
 
-- name: Define lumis release.
+- name: defined variable lumis release
   set_fact:
     lumis_release: "{{ __lumis_release }}"
   when: lumis_release is not defined
   tags:
     - lumisportal
+    - bootstrap
 
-- name: "Install packages"
+- name: install if Redhat OS
   yum:
     name: "{{ packages }}"
     state: present
   when: ansible_os_family == 'RedHat'
   tags:
     - lumisportal
+    - bootstrap
 
 - include_tasks: install.yml
   tags:
     - lumisportal
+    - bootstrap

@@ -3,8 +3,8 @@ __lumis_version: 11.2.0
 __lumis_release: 190404
 
 
-lumis_unarchive_url: http://lumisxp.lumis.com.br/setup/{{ lumis_version }}/setup-files/lumisportal_{{ lumis_version }}.{{ lumis_release }}.zip
-
+lumis_unarchive_url: https://lumisportal-repo.s3.amazonaws.com/lumisportal_{{ lumis_version }}.{{ lumis_release }}.zip
+                     
 packages:
   - unzip
   - mysql
