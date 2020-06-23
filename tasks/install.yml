@@ -5,9 +5,6 @@
     state: directory
     owner: "{{ lumis_user }}"
     group: "{{ lumis_group }}"
-  tags:
-    - lumisportal
-    - bootstrap
 
 - name: copied package remote lumis
   get_url:
@@ -15,19 +12,13 @@
     dest: "/tmp/lumisportal_{{ lumis_version }}.{{ lumis_release }}.zip"
     mode: 0755
   when: lumis_source_install_type == 'remote'
-  tags:
-    - lumisportal
-    - bootstrap
 
 - name: copied package local lumis
   copy:
-    src: "{{lumis_source_install_path}}/lumisportal_{{ lumis_version }}.{{ lumis_release }}.zip"
+    src: "{{ lumis_source_install_path }}/lumisportal_{{ lumis_version }}.{{ lumis_release }}.zip"
     dest: "/tmp/lumisportal_{{ lumis_version }}.{{ lumis_release }}.zip"
     mode: 0755
   when: lumis_source_install_type == 'local'
-  tags:
-    - lumisportal
-    - bootstrap
 
 - name: unarchive lumis zip
   unarchive:
@@ -36,11 +27,8 @@
     owner: "{{ lumis_user }}"
     group: "{{ lumis_group }}"
     mode: 0755
-    remote_src: yes
+    remote_src: true
     creates: "{{ lumis_directory }}/{{ lumis_name }}/setup"
-  tags:
-    - lumisportal
-    - bootstrap
 
 - name: configured context root on tomcat
   copy:
@@ -51,8 +39,6 @@
     mode: 0755
   when: tomcat_context == 'ROOT'
   notify: restart tomcat
-  tags:
-    - lumisportal
 
 - name: configured context different root on tomcat
   copy:
@@ -63,8 +49,6 @@
     mode: 0755
   when: tomcat_context != 'ROOT'
   notify: restart tomcat
-  tags:
-    - lumisportal
 
 - name: copied libs to tomcat
   copy:
@@ -72,11 +56,9 @@
     dest: "{{ tomcat_directory }}/{{ tomcat_name }}/lib/"
     owner: "{{ lumis_user }}"
     group: "{{ lumis_group }}"
-    remote_src: yes
+    remote_src: true
     mode: 0755
   notify: restart tomcat
-  tags:
-    - lumisportal
 
 - name: configured web.xml
   replace:
@@ -84,8 +66,6 @@
     regexp: 'LUMIS_DATA_PATH'
     replace: "{{ lumis_directory }}/{{ lumis_name }}/lumisdata"
   notify: restart tomcat
-  tags:
-    - lumisportal
 
 - name: copied template lumisportalconfig.xml
   template:
@@ -95,9 +75,6 @@
     group: "{{ lumis_group  }}"
     mode: 0755
   notify: restart tomcat
-  tags:
-    - lumisportal
-    - bootstrap
 
 - name: copied template lumishibernate.cfg.xml
   template:
@@ -107,15 +84,9 @@
     group: "{{ lumis_group  }}"
     mode: 0755
   notify: restart tomcat
-  tags:
-    - lumisportal
-    - bootstrap
 
 - include_tasks: setup-MySQL.yml
   when: lumis_db_type == 'MySQL'
-  tags:
-    - lumisportal
-    - bootstrap
 
 - name: created lumis-analysis directory
   file:
@@ -125,8 +96,6 @@
     group: elasticsearch
     mode: 0755
   notify: restart tomcat
-  tags:
-    - lumisportal
 
 - name: created a symbolic link lumis-analysis
   file:
@@ -137,14 +106,11 @@
     state: link
     mode: 0755
   notify: restart tomcat
-  tags:
-    - lumisportal
 
-- stat:
+- name: stat synonyms
+  stat:
     path: /etc/elasticsearch/lumis-analysis/synonyms-pt_BR.txt
   register: p
-  tags:
-    - lumisportal
 
 - name: created synonyms files
   file:
@@ -155,5 +121,3 @@
     mode: 0755
   with_items: "{{ synonyms }}"
   when: p.stat.exists is defined and not p.stat.exists
-  tags:
-    - lumisportal
