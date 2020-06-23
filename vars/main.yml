@@ -1,6 +1,6 @@
 ---
-__lumis_version: 12.2.0
-__lumis_release: 200122
+__lumis_version: 12.3.0
+__lumis_release: 200408
 
 
 lumis_unarchive_url: https://lumisportal-repo.s3.amazonaws.com/lumisportal_{{ lumis_version }}.{{ lumis_release }}.zip
@@ -14,3 +14,5 @@ synonyms:
   - /etc/elasticsearch/lumis-analysis/synonyms-pt_BR.txt
   - /etc/elasticsearch/lumis-analysis/synonyms-en_US.txt
   - /etc/elasticsearch/lumis-analysis/synonyms-es_ES.txt
+
+select_already_exists: "SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME='lum_Principal'"
