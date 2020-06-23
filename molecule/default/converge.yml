@@ -18,16 +18,16 @@
     - role: jeduoliveira.tomcat
     - role: geerlingguy.mysql
       mysql_databases:
-      - name: lumisportal
-        encoding: latin1
-        collation: latin1_general_ci  
+        - name: lumisportal
+          encoding: latin1
+          collation: latin1_general_ci
       mysql_enabled_on_startup: true
       mysql_root_password_update: true
-      mysql_root_password: 123456789      
+      mysql_root_password: 123456789
       mysql_users:
         - name: lumisportal
           host: "%"
           password: 123456789
           priv: "lumisportal.*:ALL"
 
-    - role: jeduoliveira.lumisportal
+    - role: ansible-role-lumisportal
