@@ -110,6 +110,15 @@
     mode: 0755
   notify: restart tomcat
 
+- name: created lumis-analysis directory
+  file:
+    path: /etc/elasticsearch/lumis-analysis
+    state: directory
+    owner: elasticsearch
+    group: elasticsearch
+    mode: 0755
+  notify: restart tomcat
+
 - name: created a symbolic link lumis-analysis
   file:
     src: "{{ lumis_directory }}/{{ lumis_name }}/lumisdata/shared/data/elasticsearch/lumis-analysis"
