@@ -30,4 +30,4 @@
           password: 123456789
           priv: "lumisportal.*:ALL"
 
-    - role: ansible-role-lumisportal
+    - role: jeduoliveira.lumisportal
