@@ -110,9 +110,9 @@
     mode: 0755
   notify: restart tomcat
 
-- name: created lumis-analysis directory
+- name: created elasticsearch directory
   file:
-    path: /etc/elasticsearch/lumis-analysis
+    path: /etc/elasticsearch
     state: directory
     owner: elasticsearch
     group: elasticsearch
