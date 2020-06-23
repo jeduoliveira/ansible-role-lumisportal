@@ -88,9 +88,31 @@
 - include_tasks: setup-MySQL.yml
   when: lumis_db_type == 'MySQL'
 
+- name: Elasticsearch | Ensure elasticsearch group
+  group:
+    name: elasticsearch
+    state: present
+
+- name: Tomcat | Ensure tomcat user
+  user:
+    name: elasticsearch
+    state: present
+    group: elasticsearch
+    createhome: false
+    system: true
+
 - name: created lumis-analysis directory
   file:
     path: "{{ lumis_directory }}/{{ lumis_name }}/lumisdata/shared/data/elasticsearch/lumis-analysis"
+    state: directory
+    owner: elasticsearch
+    group: elasticsearch
+    mode: 0755
+  notify: restart tomcat
+
+- name: created lumis-analysis directory
+  file:
+    path: /etc/elasticsearch/lumis-analysis
     state: directory
     owner: elasticsearch
     group: elasticsearch
