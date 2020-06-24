@@ -30,10 +30,17 @@
     remote_src: true
     creates: "{{ lumis_directory }}/{{ lumis_name }}/setup"
 
+- name: created lumis www directory
+  file:
+    path: "{{ lumis_www_path }}"
+    state: directory
+    owner: "{{ lumis_user }}"
+    group: "{{ lumis_group }}"
+
 - name: configured context root on tomcat
   copy:
     dest: "{{ tomcat_directory }}/{{ tomcat_name }}/conf/Catalina/localhost/{{ tomcat_context }}.xml"
-    content: "<Context path=\"\" docBase=\"{{ lumis_directory }}/{{ lumis_name }}/www\" crossContext=\"true\"/>"
+    content: "<Context path=\"\" docBase=\"{{ lumis_www_path }}\" crossContext=\"true\"/>"
     owner: "{{ lumis_group }}"
     group: "{{ lumis_group }}"
     mode: 0755

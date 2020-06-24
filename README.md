@@ -72,7 +72,7 @@ As variáveis abaixo são listadas como padrão. (Veja defaults/main.yml)
     ###############################################
     # HtmlGeneration
     ###############################################
-    lumis_htmlGeneration_enable: True
+    lumis_htmlGeneration_enable: true
     lumis_htmlGeneration_connectTimeout: 30000
     lumis_htmlGeneration_pageRequestTimeout: 50000
     lumis_htmlGeneration_frameworkUrl: http://localhost:8080
@@ -85,13 +85,13 @@ As variáveis abaixo são listadas como padrão. (Veja defaults/main.yml)
     ################################################
     # ErrorPager
     ################################################
-    lumis_errorPage_enable: True
+    lumis_errorPage_enable: true
     lumis_errorPage: customizedErrorPage.jsp
     ################################################
     # Cluster
     ################################################
     lumis_cluster_enable: False
-    lumis_cluster: TCP(start_port=2400;end_port=2400;loopback=true;bind_addr=10.76.100.104;send_buf_size=500000;recv_buf_size=500000):TCPPING(timeout=3000;initial_hosts=10.76.100.104[2400],10.76.98.15[2400];port_range=1;num_initial_members=10):MERGE2(min_interval=5000;max_interval=20000):FD_SOCK:FD(timeout=5000;max_tries=3;shun=true):VERIFY_SUSPECT(timeout=5000):lumis.portal.cluster.multiserver.DurableNAKACK(gc_lag=50;retransmit_timeout=300,600,1200,2400,4800;use_mcast_xmit=false;discard_delivered_msgs=true):pbcast.STABLE(stability_delay=6000;desired_avg_gossip=20000):pbcast.GMS(join_timeout=11000;shun=true;print_local_addr=true):lumis.portal.cluster.multiserver.Sequencer:pbcast.FLUSH(timeout=10000)
+    
 
 Dependencies
 ------------
