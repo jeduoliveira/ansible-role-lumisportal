@@ -17,14 +17,12 @@
     login_port: "{{ lumis_db_port }}"
     login_user: "{{ lumis_db_user }}"
   register: shouldToExistDatabase
-  when: inventory_hostname == "lumis1"
 
 - name: verified if database was created
   command: mysql -h "{{ lumis_db_url }}" -u "{{ lumis_db_user }}" -p"{{ lumis_db_pass }}"  -NBe "{{ select_already_exists }}"
   register: lum_Principal_already_exists
   changed_when: false
   check_mode: false
-  when: inventory_hostname == "lumis1"
 
 - name: imported tables and datas
   mysql_db:
@@ -35,15 +33,13 @@
     login_password: "{{ lumis_db_pass }}"
     login_port: "{{ lumis_db_port }}"
     login_user: "{{ lumis_db_user }}"
-  when: inventory_hostname == "lumis1" and lum_Principal_already_exists.stdout == "0"
+  when:  lum_Principal_already_exists.stdout == "0"
 
 - name: initialized Portal
   command: "./initializeportal.sh"
   args:
     chdir: "{{ lumis_directory }}/{{ lumis_name }}/setup/"
-  become: true
-  become_user: "{{ lumis_user }}"
-  when: inventory_hostname == "lumis1" and lum_Principal_already_exists.stdout == "0"
+  when:  lum_Principal_already_exists.stdout == "0"
 
 - name: copied default configuration MySQL
   template:
@@ -53,7 +49,7 @@
     group: "{{ lumis_group  }}"
     mode: 0755
   notify: restart tomcat
-  when: inventory_hostname == "lumis1" and lum_Principal_already_exists.stdout == "0"
+  when:  lum_Principal_already_exists.stdout == "0"
 
 - name: imported default configuration MySQL
   mysql_db:
@@ -64,6 +60,6 @@
     login_password: "{{ lumis_db_pass }}"
     login_port: "{{ lumis_db_port }}"
     login_user: "{{ lumis_db_user }}"
-  when: inventory_hostname == "lumis1" and lum_Principal_already_exists.stdout == "0"
+  when:  lum_Principal_already_exists.stdout == "0"
   tags:
     - skip_ansible_lint

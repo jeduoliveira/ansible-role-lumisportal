@@ -58,6 +58,17 @@
     group: "{{ lumis_group }}"
     remote_src: true
     mode: 0755
+  when: ansible_connection != "local"
+  notify: restart tomcat
+
+- name: copied libs to tomcat local
+  copy:
+    src: "{{ lumis_directory }}/{{ lumis_name }}/lib/shared/"
+    dest: "{{ tomcat_directory }}/{{ tomcat_name }}/lib/"
+    owner: "{{ lumis_user }}"
+    group: "{{ lumis_group }}"
+    mode: 0755
+  when: ansible_connection == "local"
   notify: restart tomcat
 
 - name: configured web.xml
