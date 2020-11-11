@@ -6,7 +6,7 @@
   roles:
     - role: jeduoliveira.zulu_openjdk
     - role: jeduoliveira.elasticsearch
-      elasticsearch_version: 7.1.1
+      elasticsearch_version: 7
 
     - role: jeduoliveira.tomcat
       tomcat_version: 9
