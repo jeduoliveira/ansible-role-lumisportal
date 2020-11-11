@@ -12,7 +12,7 @@ jobs:
         steps:
             - uses: actions/checkout@v2
               with:
-                path: molecule_demo
+                path: role
             
             - name: Set up Python ${{ matrix.python-version }}
               uses: actions/setup-python@v2
@@ -23,8 +23,9 @@ jobs:
               run: |
                 sudo apt install docker
                 python3 -m pip install --upgrade pip
-               
+                python3 -m pip install --user "molecule[docker,lint]"
             
             - name: Test with molecule
               run: |
+                cd role
                 molecule test
