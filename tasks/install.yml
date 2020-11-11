@@ -30,10 +30,17 @@
     remote_src: true
     creates: "{{ lumis_directory }}/{{ lumis_name }}/setup"
 
+- name: created lumis www directory
+  file:
+    path: "{{ lumis_www_path }}"
+    state: directory
+    owner: "{{ lumis_user }}"
+    group: "{{ lumis_group }}"
+
 - name: configured context root on tomcat
   copy:
     dest: "{{ tomcat_directory }}/{{ tomcat_name }}/conf/Catalina/localhost/{{ tomcat_context }}.xml"
-    content: "<Context path=\"\" docBase=\"{{ lumis_directory }}/{{ lumis_name }}/www\" crossContext=\"true\"/>"
+    content: "<Context path=\"\" docBase=\"{{ lumis_www_path }}\" crossContext=\"true\"/>"
     owner: "{{ lumis_group }}"
     group: "{{ lumis_group }}"
     mode: 0755
@@ -58,6 +65,17 @@
     group: "{{ lumis_group }}"
     remote_src: true
     mode: 0755
+  when: ansible_connection != "local"
+  notify: restart tomcat
+
+- name: copied libs to tomcat local
+  copy:
+    src: "{{ lumis_directory }}/{{ lumis_name }}/lib/shared/"
+    dest: "{{ tomcat_directory }}/{{ tomcat_name }}/lib/"
+    owner: "{{ lumis_user }}"
+    group: "{{ lumis_group }}"
+    mode: 0755
+  when: ansible_connection == "local"
   notify: restart tomcat
 
 - name: configured web.xml
@@ -110,9 +128,9 @@
     mode: 0755
   notify: restart tomcat
 
-- name: created lumis-analysis directory
+- name: created elasticsearch directory
   file:
-    path: /etc/elasticsearch/lumis-analysis
+    path: /etc/elasticsearch
     state: directory
     owner: elasticsearch
     group: elasticsearch
