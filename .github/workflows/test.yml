@@ -3,7 +3,7 @@ name: Molecule Test
 on: [push, pull_request]
 jobs:
     build:
-        runs-on: ubuntu-latest
+        runs-on: alpine-latest
         strategy:
             max-parallel: 4
             matrix:
@@ -12,7 +12,7 @@ jobs:
         steps:
             - uses: actions/checkout@v2
               with:
-                path: role
+                path: roles
             
             - name: Set up Python ${{ matrix.python-version }}
               uses: actions/setup-python@v2
@@ -22,10 +22,10 @@ jobs:
             - name: Install dependencies
               run: |
                 sudo apt install docker
+               
                 python3 -m pip install --upgrade pip
-                python3 -m pip install --user "molecule[docker,lint]"
+                python3 -m pip install  "molecule[ansible,docker,lint]"
             
             - name: Test with molecule
               run: |
-                cd role
-                molecule test
+                cd roles && molecule test
