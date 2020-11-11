@@ -6,12 +6,8 @@
   roles:
     - role: jeduoliveira.zulu_openjdk
     - role: jeduoliveira.elasticsearch
-      elasticsearch_version: 7.1.1
-
     - role: jeduoliveira.tomcat
-      tomcat_version: 9
-      tomcat_release: 9.0.30
-
+     
     - role: geerlingguy.mysql
       mysql_enabled_on_startup: true
       mysql_root_password_update: true
@@ -30,7 +26,5 @@
     - role: jeduoliveira.lumisportal
       lumis_user: tomcat
       lumis_group: tomcat
-      lumis_version: 12.3.0
-      lumis_release: 200408
       lumis_db_user: lumisportal
       lumis_db_pass: 123456789
