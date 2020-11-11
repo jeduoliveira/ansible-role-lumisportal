@@ -7,7 +7,6 @@
     - role: jeduoliveira.zulu_openjdk
     - role: jeduoliveira.elasticsearch
     - role: jeduoliveira.tomcat
-     
     - role: geerlingguy.mysql
       mysql_enabled_on_startup: true
       mysql_root_password_update: true
