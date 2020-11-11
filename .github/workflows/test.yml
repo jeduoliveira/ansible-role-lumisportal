@@ -21,7 +21,7 @@ jobs:
               run: |
                 sudo apt install docker
                 python3 -m pip install --upgrade pip
-                python3 -m pip install -r requirements.txt
+                python3 -m pip install -r molecule/default/requirements.yml
             - name: Test with molecule
               run: |
                 molecule test
