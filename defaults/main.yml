@@ -46,7 +46,7 @@ lumis_static_path: /opt/htdocs
 
 lumis_db_type: MySQL
 lumis_db_user: lumisportal
-lumis_db_pass: 123456789
+lumis_db_pass: lumisportal
 lumis_db_url: localhost
 lumis_db_port: 3306
 lumis_db_name: lumisportal

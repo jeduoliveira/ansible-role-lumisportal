@@ -1,6 +1,6 @@
 ---
 __lumis_version: 12.5.0
-__lumis_release: 200928-FreeVersion
+__lumis_release: 200928
 
 
 lumis_unarchive_url: https://lumisportal-repo.s3.amazonaws.com/lumisportal_{{ lumis_version }}.{{ lumis_release }}.zip
